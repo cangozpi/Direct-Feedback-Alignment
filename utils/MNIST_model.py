@@ -14,5 +14,5 @@ class DNN(nn.Module):
         a = image.view(-1, 28*28)
         a = self.relu(self.linear1(a))
         a = self.relu(self.linear2(a))
-        a = self.final(a)
+        a = self.final(a) 
         return a

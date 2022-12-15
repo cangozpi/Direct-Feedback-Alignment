@@ -2,7 +2,7 @@ import torch
 import numpy as np
 
 # Training Loop ==================== 
-def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform):
+def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method):
     print(f"==================== Training ====================")
     model.train()
     loss_hist = []
@@ -18,7 +18,11 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             loss = loss_fn(preds, Y)
 
             # update model
-            loss.backward()
+            if backward_method == 'DFA':
+                model.loss_distributer(loss,preds)
+                loss.backward()
+            else:
+                loss.backward()
             optimizer.step()
 
             # record metrics
