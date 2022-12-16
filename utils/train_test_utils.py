@@ -14,12 +14,12 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             model.zero_grad()
             # preprocess image inputs
             X = preprocessing_transform(X)
-            preds = model(X)
+            preds = model(X) # [B, output_dim]
             loss = loss_fn(preds, Y)
 
             # update model
             if backward_method == 'DFA':
-                model.loss_distributer(loss,preds)
+                model.loss_distributer(loss, preds)
                 loss.backward()
             else:
                 loss.backward()
