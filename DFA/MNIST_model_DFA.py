@@ -49,7 +49,7 @@ class DFA_Linear(nn.Linear):
     @staticmethod
     def dfa_backward_hook(module, grad_input, grad_output):
         """
-        NOTE: grad_input[0]: grad wrt inputs(X), grad_input[1]: grad wrt weights(W), grad_input[2]: grad wrt bias (b)
+        NOTE: grad_input[0]: grad wrt inputs(X)
         """
         #print(module, type(module))
         #print(len(grad_input), type(grad_input))
@@ -61,5 +61,5 @@ class DFA_Linear(nn.Linear):
             # grad_dfa = torch.matmul(module.backward_weight, module.global_loss_gradient.T) # B*e --> [in_features, B]
             grad_dfa = torch.matmul(module.global_loss_gradient, module.backward_weight) # B*e --> [in_features, B]
             #print(f"HOHOHO {type(tuple(grad_dfa.T))} {grad_dfa.T.shape} {len(grad_input)}")
-            return (grad_dfa,) 
+            return (grad_dfa, ) 
 

@@ -1,7 +1,23 @@
 import torch
 import numpy as np
 
+# Wrapper function that times how long the function execution took
+def timer_wrapper(func_name):
+    def func_wrapper(func):
+        import time
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            return_val = func(*args, **kwargs)
+            end_time = time.time()
+            print(f"{func_name} took {(end_time - start_time):.3f} seconds to execute.")
+            return return_val
+
+        return wrapper
+    return func_wrapper
+
+
 # Training Loop ==================== 
+@timer_wrapper("train_loop function")
 def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method):
     print(f"==================== Training ====================")
     model.train()
@@ -46,6 +62,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
 
 
 # Testing Loop ==================== 
+@timer_wrapper("test_loop function")
 def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform):
     print(f"==================== Testing ====================")
     model.eval()
@@ -76,3 +93,4 @@ def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
         print(f"Test_loss: {cur_avg_loss}, Test_accuracy: {cur_epoch_accuracy}")
 
     return loss_hist, acc_hist 
+    

@@ -7,7 +7,7 @@ from torchvision import transforms
 from utils.custom_dataloaders import load_MNIST
 from utils.MNIST_model import DNN
 from DFA.MNIST_model_DFA import DFA
-from utils.train_test_utils import train_loop, test_loop
+from utils.train_test_utils import train_loop, test_loop 
 import time
 
 # HYPERPARAMETERS -------------------- 
@@ -15,7 +15,7 @@ batch_size = 128
 epochs = 5
 lr = 5e-2
 verbose = True
-backward_method = "DNN" # possible options "DFA" if not Backprop is used
+backward_method = "DFA" # possible options "DFA" if not Backprop is used
 # ------------------------------------
 
 
@@ -36,8 +36,6 @@ start = time.time()
 
 loss_hist_train, acc_hist_train = train_loop(model, epochs, optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method)
 
-end = time.time()
-print(str(end - start)+" time")
 # Test model on MNIST
 loss_hist_test, acc_hist_test = test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
 

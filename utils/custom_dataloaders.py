@@ -9,12 +9,14 @@ def load_MNIST(batch_size):
         root = 'data',
         train = True,                         
         transform = transforms.ToTensor(), 
+        download=True
     )
 
     test_dataset = datasets.MNIST(
         root = 'data', 
         train = False, 
         transform = transforms.ToTensor(), 
+        download=True
     )
 
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
