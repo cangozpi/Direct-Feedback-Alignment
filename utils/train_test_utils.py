@@ -74,7 +74,8 @@ def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
     for X, Y in test_dataloader:
         # preprocess image inputs
         X = preprocessing_transform(X)
-        preds = model(X)
+        with torch.no_grad():
+            preds = model(X)
         loss = loss_fn(preds, Y)
 
         # record metrics
