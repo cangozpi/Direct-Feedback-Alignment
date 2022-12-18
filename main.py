@@ -7,7 +7,7 @@ from torchvision import transforms
 from utils.custom_dataloaders import load_MNIST
 from utils.MNIST_model import DNN
 from DFA.MNIST_model_DFA import DFA
-from utils.train_test_utils import train_loop, test_loop 
+from utils.train_test_utils import train_loop, test_loop, set_seed
 import time
 
 # HYPERPARAMETERS -------------------- 
@@ -18,6 +18,7 @@ verbose = True
 backward_method = "DFA" # possible options "DFA" if not Backprop is used
 # ------------------------------------
 
+set_seed(42) # Set seed for reproducibility reasons
 
 # Load MNIST dataset
 train_dataloader, test_dataloader, preprocessing_transform = load_MNIST(batch_size)

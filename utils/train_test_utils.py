@@ -1,5 +1,12 @@
+import random
 import torch
 import numpy as np
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.use_deterministic_algorithms(True)
+    torch.manual_seed(seed)
 
 # Wrapper function that times how long the function execution took
 def timer_wrapper(func_name):

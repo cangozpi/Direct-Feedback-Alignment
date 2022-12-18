@@ -22,6 +22,9 @@ class DFA(nn.Module):
         return a
         
     def loss_distributer(self, loss, output):
+        """
+        Propagates global error signal (e) from the top layer towards the intermediate layers
+        """
         global_loss_gradient = grad(loss, output, retain_graph=True)[0] # [B, ouput_dim]
         # Broadcast global gradient (e) to every layer
         for layer in self.modules():
