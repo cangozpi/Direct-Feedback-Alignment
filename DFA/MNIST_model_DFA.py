@@ -5,12 +5,16 @@ from .layers import *
 
 # Model architecture for MNIST dataset
 class DFA(nn.Module):
-    def __init__(self, p_drop):
+    def __init__(self, p_drop, use_BatchNorm1D):
         """
         Inputs:
-            p_drop (float): dropout probability
+            p_drop (float): dropout probability.
+            use_BatchNorm1D (bool): If True apply batch norm.
+
         """
         super().__init__()
+        self.use_BatchNorm1D = use_BatchNorm1D
+        self.batchNorm = torch.nn.BatchNorm1d(28*28)
         self.linear1 = DFA_Linear(28*28, 100,10) 
         self.dropout1 = torch.nn.Dropout(p_drop)
         self.linear2 = DFA_Linear(100, 50,10) 
@@ -21,7 +25,9 @@ class DFA(nn.Module):
         
 
     def forward(self, image):
-        a = image.view(-1, 28*28)
+        a = image.view(-1, 28*28) # Flatten input --> [B, W*H*C=28*28]
+        if self.use_BatchNorm1D:
+            a = self.batchNorm(a) # --> [B, W*H*C=28*28]
         a = self.relu(self.dropout1(self.linear1(a)))
         a = self.relu(self.dropout2(self.linear2(a)))
         a = self.final(a) 

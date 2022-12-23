@@ -15,4 +15,5 @@ This code implements Direct Feedback Alignment (DFA) functionality on top of pyt
 - Add tensorboard visualizaitons
 - Implement parallelization capability for backward pass
 - Add another Dataset and Model
+- Add config file for experiments
 - Perform experiments
