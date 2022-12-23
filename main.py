@@ -56,7 +56,7 @@ if __name__ == "__main__":
     loss_hist_train, acc_hist_train = train_loop(model, epochs, optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda, lr_sched, tb_summaryWriter)
 
     # Test model on MNIST
-    loss_hist_test, acc_hist_test = test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
+    loss_hist_test, acc_hist_test = test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform, tb_summaryWriter)
 
 
     # Record Hyperparameters on TensorBoard

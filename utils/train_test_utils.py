@@ -159,7 +159,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
 
 # Testing Loop ==================== 
 @timer_wrapper("test_loop function")
-def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform):
+def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform, tb_summaryWriter):
     print(f"==================== Testing ====================")
     model.eval()
     loss_hist = []
@@ -188,6 +188,9 @@ def test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
     acc_hist.append(cur_epoch_accuracy)
     if verbose:
         print(f"Test_loss: {cur_avg_loss}, Test_accuracy: {cur_epoch_accuracy}")
+    # Log to Tensorboard
+    tb_summaryWriter.add_scalar("Test Loss", cur_avg_loss, 1)
+    tb_summaryWriter.add_scalar("Test Accuracy", cur_epoch_accuracy, 1)
 
     return loss_hist, acc_hist 
     
