@@ -1,6 +1,7 @@
 import random
 import torch
 import numpy as np
+from DFA.layers import DFA_Linear
 
 def set_seed(seed):
     random.seed(seed)
@@ -25,7 +26,7 @@ def timer_wrapper(func_name):
 
 # Training Loop ==================== 
 @timer_wrapper("train_loop function")
-def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method):
+def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda):
     print(f"==================== Training ====================")
     model.train()
     loss_hist = []
@@ -39,6 +40,37 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             X = preprocessing_transform(X)
             preds = model(X) # [B, output_dim]
             loss = loss_fn(preds, Y)
+
+
+            # Calculate L1 regularization loss
+            l1_regularization_loss = 0
+            l1_regularization_layer_weights = []
+            for m in model.modules():
+                if isinstance(m, DFA_Linear): # Only DFA_Linear layer's weights are taken into account for L1 regularization
+                    cur_layer_weights = m.weight # obtain current layer's weight tensor
+                    cur_layer_weights = cur_layer_weights.reshape(-1) # Flatten weights
+                    l1_regularization_layer_weights.append(cur_layer_weights)
+
+
+            l1_regularization_layer_weights = torch.cat(l1_regularization_layer_weights) # --> [num_linear_layers, Flatten(layer_weight)]
+            l1_regularization_loss += ( l1_regularization_lambda * torch.norm(l1_regularization_layer_weights, 1))
+
+            # Calculate L2 regularization loss
+            l2_regularization_loss = 0
+            l2_regularization_layer_weights = []
+            for m in model.modules():
+                if isinstance(m, DFA_Linear): # Only DFA_Linear layer's weights are taken into account for L1 regularization
+                    cur_layer_weights = m.weight # obtain current layer's weight tensor
+                    cur_layer_weights = cur_layer_weights.reshape(-1) # Flatten weights
+                    l2_regularization_layer_weights.append(cur_layer_weights)
+
+
+            l2_regularization_layer_weights = torch.cat(l2_regularization_layer_weights) # --> [num_linear_layers, Flatten(layer_weight)]
+            l2_regularization_loss += (l2_regularization_lambda * torch.square(torch.norm(l2_regularization_layer_weights, 2)))
+
+            # Add L1 and L2 regularizations to the loss
+            loss += l1_regularization_loss + l2_regularization_loss
+
 
             # update model
             if backward_method == 'DFA':
