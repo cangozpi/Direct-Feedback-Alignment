@@ -4,16 +4,41 @@ This code implements Direct Feedback Alignment (DFA) functionality on top of pyt
 
 ---
 
+## Running Code:
+
+Check out _config.yaml_ file for controlling hyperparameters and regularizations used.
+
+- After setting parameters in _config.yaml_ then run the code by:
+  ```bash
+  python main.py
+  ```
+
+---
+
+## Supported Regularizations:
+
+1. Dropout
+2. BatchNorm
+3. LayerNorm
+4. Weight Decay
+5. L2 Regularization
+6. L1 Regularization
+7. Learning Rate Scheduling (ConstLR)
+8. Early Stopping (_Implemented yet not supported by training on MNIST dataset_)
+
+---
+
 ## TODO:
 
 - Setup dataset :heavy_check_mark:
 - Implement a Neural Network :heavy_check_mark:
 - DFA backward implementation :heavy_check_mark:
 - Implement train & test loops :heavy_check_mark:
-- Add experiments for different normalization functions
+- Implement Normalization functions :heavy_check_mark:
+- Add config file for experiments :heavy_check_mark:
+- Add tensorboard visualizations
+- Perform experiments with Regularizations
 - Add experiments for different activation functions
-- Add tensorboard visualizaitons
 - Implement parallelization capability for backward pass
 - Add another Dataset and Model
-- Add config file for experiments
-- Perform experiments
+- Perform experiments with Activations
