@@ -24,6 +24,31 @@ def timer_wrapper(func_name):
     return func_wrapper
 
 
+# Implements Early Stopping  #TODO: MNIST training does not have validation dataset so currently it is not added to train_loop 
+#TODO: MNIST training does not have validation dataset so currently it is not added to train_loop
+class EarlyStopping:
+    def __init__(self, tolerance = 5, min_delta = 0):
+        """
+        Used as follows:
+            In your training loop in between epochs put the following:
+                # early stopping
+                early_stopping(epoch_train_loss, epoch_validate_loss)
+                if early_stopping.early_stop:
+                    print(f"Early Stopping stopped at epoch: {epoch}")
+                    break
+        """
+        self.tolerance = tolerance
+        self.min_delta = min_delta
+        self.counter = 0
+        self.early_stop = False
+
+    def __call__(self, train_loss, validation_loss):
+        if (validation_loss - train_loss) > self.min_delta:
+            self.counter +=1
+            if self.counter >= self.tolerance:  
+                self.early_stop = True
+
+
 # Training Loop ==================== 
 @timer_wrapper("train_loop function")
 def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda, lr_sched):

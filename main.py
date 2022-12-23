@@ -33,7 +33,7 @@ l1_regularization_lambda = 0 # L1 regularization lambda value. If set to 0 then 
 l2_regularization_lambda = 0 # L1 regularization lambda value. If set to 0 then no L1 regularization applied
 weight_decay = 0 # Weight Decay. If set to 0 than it is regular SGD with no weight decay (set to something btw [1e-1, 1e-7])
 lr_schedular = {
-    'use_lr_schedular': True, # If True, torch.optim.lr_schedular.ConstantLR is used
+    'use_lr_schedular': False, # If True, torch.optim.lr_schedular.ConstantLR is used
     'factor': 0.5, # The number we multiply learning rate until the milestone
     'total_iters': 5 # The number of steps that the scheduler decays the learning rate
 }
