@@ -48,7 +48,7 @@ if __name__ == "__main__":
     else:
         model = DNN()
     optimizer = torch.optim.SGD(model.parameters(), lr, weight_decay = weight_decay)
-    lr_sched = torch.optim.lr_scheduler.ConstantLR(optimizer, factor = float(lr_schedular['factor']), total_iters = lr_schedular['total_iters']) if lr_schedular['use_lr_schedular'] else None
+    lr_sched = torch.optim.lr_scheduler.StepLR(optimizer, step_size = int(lr_schedular['step_size']), gamma = float(lr_schedular['gamma'])) if lr_schedular['use_lr_schedular'] else None
     loss_fn = torch.nn.CrossEntropyLoss()
 
     # Train model on MNIST

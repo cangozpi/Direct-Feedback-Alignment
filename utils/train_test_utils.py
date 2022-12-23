@@ -129,14 +129,15 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
         cur_avg_loss = np.mean(iter_loss)
         loss_hist.append(cur_avg_loss) 
         acc_hist.append(cur_epoch_accuracy)
-        if verbose:
+        if verbose and (lr_sched is not None):
+            print(f"Epoch: {epoch}, loss: {cur_avg_loss}, accuracy: {cur_epoch_accuracy}, lr: {lr_sched.get_last_lr()[-1]}")
+        elif verbose:
             print(f"Epoch: {epoch}, loss: {cur_avg_loss}, accuracy: {cur_epoch_accuracy}")
         
         # Log to Tensorboard
         tb_summaryWriter.add_scalar("Training Loss", loss_hist[-1], epoch)
         tb_summaryWriter.add_scalar("Training Accuracy", acc_hist[-1], epoch)
         if lr_sched is not None:
-            print(lr_sched.get_last_lr(), lr_sched.get_lr(), lr_sched.optimizer.param_groups[0]['lr'], lr_sched._last_lr, optimizer.param_groups[0]['lr'],  epoch,  "LR_SCHEDDDDDDDDDDD")
             tb_summaryWriter.add_scalar("Training Learning Rate", lr_sched.get_last_lr()[-1], epoch)
 
         # Log iterations weights and gradients 
