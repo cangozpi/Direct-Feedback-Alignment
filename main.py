@@ -30,11 +30,6 @@ optimizer = torch.optim.SGD(model.parameters(), lr)
 loss_fn = torch.nn.CrossEntropyLoss()
 
 # Train model on MNIST
-
-
-start = time.time()
-
-
 loss_hist_train, acc_hist_train = train_loop(model, epochs, optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method)
 
 # Test model on MNIST
