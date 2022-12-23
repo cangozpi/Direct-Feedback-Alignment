@@ -21,8 +21,7 @@ available_regularizaiton_methods = [
     'Dropout',
     'BatchNorm1D',
     'LayerNorm',
-    'L2 Regularization',
-    'Weight Normalization',
+    'Weight Decay',
     'L1 Regularization',
     'Learning Rate Scheduling',
     'Early Stoppping'
@@ -30,6 +29,7 @@ available_regularizaiton_methods = [
 p_drop = 0.0 # Dropout probability. If set to 0 than no dropout will be applied
 use_BatchNorm1D = False # If True apply batch norm
 use_LayerNorm1D = False # If True apply layer norm
+weight_decay = 0 # Weight Decay. If set to 0 than it is regular SGD with no weight decay (set to something btw [1e-1, 1e-7])
 # ------------------------------------
 
 
@@ -41,7 +41,7 @@ if backward_method == "DFA":
     model = DFA(p_drop, use_BatchNorm1D, use_LayerNorm1D)
 else:
     model = DNN()
-optimizer = torch.optim.SGD(model.parameters(), lr)
+optimizer = torch.optim.SGD(model.parameters(), lr, weight_decay = weight_decay)
 loss_fn = torch.nn.CrossEntropyLoss()
 
 # Train model on MNIST
