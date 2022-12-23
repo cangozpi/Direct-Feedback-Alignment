@@ -26,7 +26,7 @@ def timer_wrapper(func_name):
 
 # Training Loop ==================== 
 @timer_wrapper("train_loop function")
-def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda):
+def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda, lr_sched):
     print(f"==================== Training ====================")
     model.train()
     loss_hist = []
@@ -94,6 +94,10 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
         acc_hist.append(cur_epoch_accuracy)
         if verbose:
             print(f"Epoch: {epoch}, loss: {cur_avg_loss}, accuracy: {cur_epoch_accuracy}")
+
+        # Apply learning rate scheduling
+        if lr_sched is not None:
+            lr_sched.step()
 
     return loss_hist, acc_hist 
 
