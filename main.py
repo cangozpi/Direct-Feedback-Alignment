@@ -29,6 +29,7 @@ available_regularizaiton_methods = [
 ]
 p_drop = 0.0 # Dropout probability. If set to 0 than no dropout will be applied
 use_BatchNorm1D = False # If True apply batch norm
+use_LayerNorm1D = False # If True apply layer norm
 # ------------------------------------
 
 
@@ -37,7 +38,7 @@ set_seed(42) # Set seed for reproducibility reasons
 # Load MNIST dataset
 train_dataloader, test_dataloader, preprocessing_transform = load_MNIST(batch_size)
 if backward_method == "DFA":
-    model = DFA(p_drop, use_BatchNorm1D)
+    model = DFA(p_drop, use_BatchNorm1D, use_LayerNorm1D)
 else:
     model = DNN()
 optimizer = torch.optim.SGD(model.parameters(), lr)
