@@ -3,6 +3,7 @@ import torch
 import numpy as np
 from DFA.layers import DFA_Linear
 
+
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
@@ -51,7 +52,7 @@ class EarlyStopping:
 
 # Training Loop ==================== 
 @timer_wrapper("train_loop function")
-def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda, lr_sched):
+def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, preprocessing_transform, backward_method, l1_regularization_lambda, l2_regularization_lambda, lr_sched, tb_summaryWriter):
     print(f"==================== Training ====================")
     model.train()
     loss_hist = []
@@ -59,6 +60,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
     for epoch in range(1, epochs + 1):
         iter_loss = []
         iter_accuracy_hist = []
+        iter_model_param_dict = {} # Records model parameters (weights & grads) through iterations
         for X, Y in train_dataloader:
             model.zero_grad()
             # preprocess image inputs
@@ -103,6 +105,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
                 loss.backward()
             else:
                 loss.backward()
+
             optimizer.step()
 
             # record metrics
@@ -112,6 +115,15 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             iter_accuracy = torch.sum(pred_indices == Y) / X.shape[0]
             iter_accuracy_hist.append(iter_accuracy)
 
+            for name, param in model.named_parameters(): # Record model parameters (weights & grad)
+                if hasattr(param, 'grad') and (param.grad is not None):
+                    if name not in iter_model_param_dict:
+                        iter_model_param_dict[name] = [param]
+                        iter_model_param_dict[name+".grad"] = [param.grad]
+                    else:
+                        iter_model_param_dict[name].append(param)
+                        iter_model_param_dict[name+".grad"].append(param.grad)
+
         cur_epoch_accuracy = np.mean(iter_accuracy_hist)
         # average out metrics
         cur_avg_loss = np.mean(iter_loss)
@@ -119,10 +131,25 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
         acc_hist.append(cur_epoch_accuracy)
         if verbose:
             print(f"Epoch: {epoch}, loss: {cur_avg_loss}, accuracy: {cur_epoch_accuracy}")
+        
+        # Log to Tensorboard
+        tb_summaryWriter.add_scalar("Training Loss", loss_hist[-1], epoch)
+        tb_summaryWriter.add_scalar("Training Accuracy", acc_hist[-1], epoch)
+        if lr_sched is not None:
+            print(lr_sched.get_last_lr(), lr_sched.get_lr(), lr_sched.optimizer.param_groups[0]['lr'], lr_sched._last_lr, optimizer.param_groups[0]['lr'],  epoch,  "LR_SCHEDDDDDDDDDDD")
+            tb_summaryWriter.add_scalar("Training Learning Rate", lr_sched.get_last_lr()[-1], epoch)
+
+        # Log iterations weights and gradients 
+        for name, param in iter_model_param_dict.items():
+            # average out recorded values over the iterations 
+            param = torch.stack(param) # --> [num_iter, weight_dim1, weight_dim2]
+            avg_param = torch.mean(param, dim=0)
+            tb_summaryWriter.add_histogram(name, avg_param, epoch)
 
         # Apply learning rate scheduling
         if lr_sched is not None:
             lr_sched.step()
+
 
     return loss_hist, acc_hist 
 
