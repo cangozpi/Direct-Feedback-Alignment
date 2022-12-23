@@ -9,9 +9,16 @@ This code implements Direct Feedback Alignment (DFA) functionality on top of pyt
 **Important:** Check out _config.yaml_ file for configuring the hyperparameters and the regularizations used.
 
 - After setting parameters in _config.yaml_ then run the code by:
+
   ```bash
   python main.py
   ```
+
+- To see visualizations of your experiments (_TensorBoard_):
+  ```bash
+  tensorboard --logdir logs
+  ```
+  **Note:** _Your experiments will be automatically logged under the /logs directory. Your config.yaml configurations will be available under the "HPARAMS" tab in TensorBoard._
 
 ---
 

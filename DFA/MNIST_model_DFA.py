@@ -20,11 +20,11 @@ class DFA(nn.Module):
         self.use_LayerNorm1D = use_LayerNorm1D
         self.layerNorm = torch.nn.LayerNorm(28*28)
 
-        self.linear1 = DFA_Linear(28*28, 100,10) 
+        self.linear1 = DFA_Linear(28*28, 100, 10) 
         self.dropout1 = torch.nn.Dropout(p_drop)
-        self.linear2 = DFA_Linear(100, 50,10) 
+        self.linear2 = DFA_Linear(100, 50, 10) 
         self.dropout2 = torch.nn.Dropout(p_drop)
-        self.final = DFA_Linear(50, 10,10)
+        self.final = DFA_Linear(50, 10, 10)
         self.relu = nn.ReLU()
         
         
