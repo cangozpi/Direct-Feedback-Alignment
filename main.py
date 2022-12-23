@@ -16,14 +16,27 @@ epochs = 3
 lr = 5e-2
 verbose = True
 backward_method = "DFA" # possible options "DFA" if not Backprop is used
+# Regularization Methods ------------------------------------
+available_regularizaiton_methods = [
+    'Dropout',
+    'BatchNorm',
+    'LayerNorm',
+    'L2 Regularization',
+    'Weight Normalization',
+    'L1 Regularization',
+    'Learning Rate Scheduling',
+    'Early Stoppping'
+]
+p_drop = 0.2 # Dropout probability. If set to 0 than no dropout will be applied
 # ------------------------------------
+
 
 set_seed(42) # Set seed for reproducibility reasons
 
 # Load MNIST dataset
 train_dataloader, test_dataloader, preprocessing_transform = load_MNIST(batch_size)
 if backward_method == "DFA":
-    model = DFA()
+    model = DFA(p_drop)
 else:
     model = DNN()
 optimizer = torch.optim.SGD(model.parameters(), lr)
