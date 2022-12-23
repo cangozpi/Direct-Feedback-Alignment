@@ -4,9 +4,9 @@ This code implements Direct Feedback Alignment (DFA) functionality on top of pyt
 
 ---
 
-## Running Code:
+## Configure & Run Code:
 
-Check out _config.yaml_ file for controlling hyperparameters and regularizations used.
+**Important:** Check out _config.yaml_ file for configuring the hyperparameters and the regularizations used.
 
 - After setting parameters in _config.yaml_ then run the code by:
   ```bash
@@ -36,7 +36,7 @@ Check out _config.yaml_ file for controlling hyperparameters and regularizations
 - Implement train & test loops :heavy_check_mark:
 - Implement Normalization functions :heavy_check_mark:
 - Add config file for experiments :heavy_check_mark:
-- Add tensorboard visualizations
+- Add tensorboard visualizations :heavy_check_mark:
 - Perform experiments with Regularizations
 - Add experiments for different activation functions
 - Implement parallelization capability for backward pass

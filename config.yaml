@@ -15,7 +15,7 @@ backward_method: DFA # possible options "DFA" if not Backprop is used
 #     - Weight Decay
 #     - L1 Regularization
 #     - Learning Rate Scheduling
-#     - Early Stoppping'
+#     - Early Stoppping' # currently not available
 # ]
 
 p_drop: 0.0 # Dropout probability. If set to 0 than no dropout will be applied

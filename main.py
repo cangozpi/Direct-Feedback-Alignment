@@ -4,13 +4,15 @@ from torch import nn
 from torchvision import datasets
 from torchvision import transforms 
 
-from utils.config_parser import read_yaml_config
+from utils.config_parser import read_yaml_config, get_tensorboard_hparam_dict
 from utils.custom_dataloaders import load_MNIST
 from utils.MNIST_model import DNN
 from DFA.MNIST_model_DFA import DFA
 from utils.train_test_utils import train_loop, test_loop, set_seed
 from torch.utils.tensorboard import SummaryWriter
 import datetime
+import os
+import copy
 import time
 
 if __name__ == "__main__":
@@ -33,13 +35,12 @@ if __name__ == "__main__":
     l1_regularization_lambda = float(config['l1_regularization_lambda'])
     l2_regularization_lambda = float(config['l2_regularization_lambda'])
     weight_decay = float(config['weight_decay'])
-    lr_schedular = config['lr_schedular']
+    lr_schedular = copy.deepcopy(config['lr_schedular'])
     # ------------------------------------ ===========================================
 
     # Initialize TensorBoard
-    log_dir, run_name = "logs/", "cartpole_"+datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    tb_summaryWriter = SummaryWriter(log_dir + run_name)
-    # tb_summaryWriter.add_hparams({'lr': 0.1*1, 'bsize': 1}, {}) #TODO: fix this
+    log_dir, run_name = "logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S") 
+    tb_summaryWriter = SummaryWriter(os.path.join(log_dir, run_name)) 
 
     # Load MNIST dataset
     train_dataloader, test_dataloader, preprocessing_transform = load_MNIST(batch_size)
@@ -56,3 +57,10 @@ if __name__ == "__main__":
 
     # Test model on MNIST
     loss_hist_test, acc_hist_test = test_loop(model, loss_fn, verbose, test_dataloader, preprocessing_transform)
+
+
+    # Record Hyperparameters on TensorBoard
+    hparam_dict = get_tensorboard_hparam_dict(config, lr_schedular)
+    tb_summaryWriter.add_hparams(hparam_dict, {"hparam/dummy_metric": -1},
+                   run_name=os.path.join(os.path.dirname(os.path.realpath(__file__)), log_dir, run_name))
+    tb_summaryWriter.close()
