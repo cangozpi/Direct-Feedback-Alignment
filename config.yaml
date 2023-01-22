@@ -1,6 +1,6 @@
 # HYPERPARAMETERS --------------------
 batch_size: 128
-epochs: 4
+epochs: 5
 lr: 5e-2
 verbose: True
 backward_method: DFA # possible options "DFA" if not Backprop is used
@@ -16,7 +16,7 @@ backward_method: DFA # possible options "DFA" if not Backprop is used
 #     - L1 Regularization
 #     - Learning Rate Scheduling
 #     - Early Stoppping' # currently not available
-# ]
+# 
 
 p_drop: 0.0 # Dropout probability. If set to 0 than no dropout will be applied
 use_BatchNorm1D: False # If True apply batch norm

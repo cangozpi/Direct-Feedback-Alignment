@@ -73,7 +73,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             l1_regularization_loss = 0
             l1_regularization_layer_weights = []
             for m in model.modules():
-                if isinstance(m, DFA_Linear): # Only DFA_Linear layer's weights are taken into account for L1 regularization
+                if isinstance(m, (DFA_Linear, torch.nn.Linear)): # Only DFA_Linear layer's weights are taken into account for L1 regularization
                     cur_layer_weights = m.weight # obtain current layer's weight tensor
                     cur_layer_weights = cur_layer_weights.reshape(-1) # Flatten weights
                     l1_regularization_layer_weights.append(cur_layer_weights)
@@ -86,7 +86,7 @@ def train_loop(model, epochs , optimizer, loss_fn, verbose, train_dataloader, pr
             l2_regularization_loss = 0
             l2_regularization_layer_weights = []
             for m in model.modules():
-                if isinstance(m, DFA_Linear): # Only DFA_Linear layer's weights are taken into account for L1 regularization
+                if isinstance(m, (DFA_Linear, torch.nn.Linear)): # Only DFA_Linear layer's weights are taken into account for L1 regularization
                     cur_layer_weights = m.weight # obtain current layer's weight tensor
                     cur_layer_weights = cur_layer_weights.reshape(-1) # Flatten weights
                     l2_regularization_layer_weights.append(cur_layer_weights)

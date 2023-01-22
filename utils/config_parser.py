@@ -23,6 +23,6 @@ def get_tensorboard_hparam_dict(config, lr_schedular):
     del config['lr_schedular']
     del config['verbose']
     config['use_lr_schedular'] = lr_schedular['use_lr_schedular']
-    config['lr_sched_step_size'] = lr_schedular['step_size']
-    config['lr_sched_gamma'] = lr_schedular['gamma']
+    config['lr_sched_step_size'] = int(lr_schedular['step_size'])
+    config['lr_sched_gamma'] = float(lr_schedular['gamma'])
     return config
