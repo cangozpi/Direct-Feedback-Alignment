@@ -1,9 +1,10 @@
 # HYPERPARAMETERS --------------------
 batch_size: 128
-epochs: 5
+epochs: 20
 lr: 5e-2
 verbose: True
-backward_method: DFA # possible options "DFA" if not Backprop is used
+backward_method: DFA # possible options "DFA", if not Backprop is used
+optimizer_algorithm: ADAM # possible options "ADAM", if not SGD is used
 
 # -------------------------------------
 # Regularization Methods ------------------------------------

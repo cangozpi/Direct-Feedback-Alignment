@@ -18,7 +18,7 @@ import time
 if __name__ == "__main__":
     set_seed(42) # Set seed for reproducibility reasons
 
-    # Read in parameters from config.yaml ===========================================
+    # Read in parameters from config.yaml ==========progress=================================
     config_path = 'config.yaml'
     config = read_yaml_config(config_path)
 
@@ -36,6 +36,7 @@ if __name__ == "__main__":
     l2_regularization_lambda = float(config['l2_regularization_lambda'])
     weight_decay = float(config['weight_decay'])
     lr_schedular = copy.deepcopy(config['lr_schedular'])
+    optimizer_algorithm = config['optimizer_algorithm']
     # ------------------------------------ ===========================================
 
     # Initialize TensorBoard
@@ -48,7 +49,10 @@ if __name__ == "__main__":
         model = DFA(p_drop, use_BatchNorm1D, use_LayerNorm1D)
     else:
         model = DNN(p_drop, use_BatchNorm1D, use_LayerNorm1D)
-    optimizer = torch.optim.Adam(model.parameters(), lr, weight_decay = weight_decay)
+    if optimizer_algorithm == "ADAM":
+        optimizer = torch.optim.Adam(model.parameters(), lr, weight_decay = weight_decay)
+    else: # SGD
+        optimizer = torch.optim.SGD(model.parameters(), lr, weight_decay = weight_decay)
     lr_sched = torch.optim.lr_scheduler.StepLR(optimizer, step_size = int(lr_schedular['step_size']), gamma = float(lr_schedular['gamma'])) if lr_schedular['use_lr_schedular'] else None
     loss_fn = torch.nn.CrossEntropyLoss()
 
