@@ -44,8 +44,8 @@ This code implements Direct Feedback Alignment (DFA) functionality on top of pyt
 - Implement Normalization functions :heavy_check_mark:
 - Add config file for experiments :heavy_check_mark:
 - Add tensorboard visualizations :heavy_check_mark:
-- Perform experiments with Regularizations
-- Add experiments for different activation functions
+- Perform experiments with Regularizations :heavy_check_mark:
+- Add experiments for different activation functions :heavy_check_mark:
 - Implement parallelization capability for backward pass
 - Add another Dataset and Model
-- Perform experiments with Activations
+- Perform experiments with Activations :heavy_check_mark:
